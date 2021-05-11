@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>サンプル</title>
+</head>
+<body>
+
+<p>サンプルページです。</p>
+
+<div>
+<input type="file" id="fileBox" multiple >
+</div>
+
+<p id="msg"></p>
+
+<script>
+function changeFile(){
+  let files = fileBox.files;
+  let filenames = [];
+  let filevalue = [];
+
+  for(let i = 0 ; i < files.length ; i++){
+  	// if (i > 0){
+    //   filenames += ', ';
+  	// }
+
+    filenames.push(files[i].name);
+
+    let name = filenames[filenames.length-1];
+    filevalue.push(name.substring(0, name.lastIndexOf(".")));
+  }
+
+  for (let i = 0; i < filenames.length; i++) {
+      msg.innerText += "{ type: 'image', name: '"+ filevalue[i] +"', src: 'Assets/Images/"+ filenames[i] +"'},\n";
+  }
+    
+}
+
+let fileBox = document.getElementById('fileBox');
+fileBox.addEventListener('change', changeFile);
+let msg = document.getElementById('msg');
+</script>
+
+</body>
+</html>
