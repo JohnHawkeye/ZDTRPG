@@ -5,6 +5,10 @@ var player_str = 10;
 var player_vit = 10;
 var player_spd = 10;
 
+var player_equip_str = 0;
+var player_equip_vit = 0;
+var player_equip_spd = 0;
+
 var player_money = 1000;
 var player_zp = 100;
 
@@ -20,3 +24,14 @@ var player_equip = [
     { type: "shoes", name: "shoes" ,str:0,vit:0},
     { type: "artifact", name: "" ,str:0,vit:0}
 ];
+
+function PlayerEquipAddition(){
+
+    player_equip_str = 0;
+    player_equip_vit = 0;
+
+    for (let i = 0; i < player_equip.length; i++) {
+        player_equip_str += player_equip[i].str;
+        player_equip_vit += player_equip[i].vit;
+    }
+}

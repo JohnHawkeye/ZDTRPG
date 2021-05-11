@@ -14,6 +14,7 @@ function GetMessage(name) {
             SetNpcFriend();
             SetMessageBranch();
             break;
+             
     }
 }
 
@@ -49,6 +50,12 @@ function GetTreasureMessage(name){
             break;
 
     }
+}
+
+function SetTreasureCommand(){
+    command = [
+        { name: 'treasure_leave', label: '－何もせずに立ち去る', pos_x: 1184, pos_y: 674 },
+    ];
 }
 
 function SetBattleCommand() {

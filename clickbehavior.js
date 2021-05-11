@@ -211,6 +211,7 @@ function ClickInventoryBehavior() {
                         player_equip[j].vit = inventory[i].vit;
                     }
                 }
+                PlayerEquipAddition();
 
                 //Consumables
                 if (inventory[i].category === "drink") {

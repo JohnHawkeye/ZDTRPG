@@ -81,6 +81,8 @@ function Prepare() {
         { name: 'map', pos_x: 448, pos_y: 98, size: 704 },
     ];
 
+    //player equip state
+    PlayerEquipAddition();
 }
 
 function InitAreaData() {

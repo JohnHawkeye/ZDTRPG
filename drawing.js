@@ -168,8 +168,10 @@ function DrawingPlayerState() {
 
     //hp
     ctx.fillText("HP:" + player_nowhp + " / " + player_maxhp, offset_x + 8, offset_y + 8);
-    ctx.fillText("STR:" + player_str + " VIT:" + player_vit + " SPD:" + player_spd, offset_x + 8, offset_y + 8 + space * 1);
-    ctx.fillText("ZP:" + player_zp, offset_x + 8, offset_y + 8 + space * 2);
+    ctx.fillText("STR:" + player_str + "(+" + player_equip_str + ")", offset_x + 8, offset_y + 8 + space * 1);
+    ctx.fillText("VIT:" + player_vit + "(+" + player_equip_vit + ")", offset_x + 8, offset_y + 8 + space * 2);
+    //ctx.fillText("SPD:" + player_spd + "(+" + + ")", offset_x + 8, offset_y + 8 + space * 1);
+    ctx.fillText("ZP:" + player_zp, offset_x + 8, offset_y + 8 + space * 3);
 
     //money
     offset_x = 400;

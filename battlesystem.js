@@ -53,20 +53,14 @@ function BattleCalculate() {
     let e_str = 0;
     let e_vit = 0;
 
-    let equip_str = 0;
-    let equip_vit = 0;
-    
-    for (let i = 0; i < player_equip.length; i++) {
-        equip_str += player_equip[i].str;
-        equip_vit += player_equip[i].vit;
-    }
-
     switch (battlePlayerAction) {
         case 'attack':
             p_str = player_str;
+            p_str += player_equip_str;
             break;
         case 'defend':
             p_vit = player_vit;
+            p_vit += player_equip_vit;
             break;
         case 'critical':
             p_str = player_str * 2;
@@ -89,11 +83,11 @@ function BattleCalculate() {
             break;
     }
 
-    let e_damage = (p_str + equip_str) - e_vit;
+    let e_damage = p_str - e_vit;
     if(e_damage <0)
         e_damage = 0;
     
-    let p_damage = e_str - (p_vit + equip_vit);
+    let p_damage = e_str - p_vit;
     if(p_damage <0)
         p_damage = 0;
 

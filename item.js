@@ -3,7 +3,7 @@ var itemList = [
     { name: 'left', category: 'left', label: "ムチ", str: 10, vit: 0 },
     { name: 'helmet', category: 'helmet', label: "帽子", str: 0, vit: 0 },
 
-    { name: 'drink', category: 'drink', label: "ミルク", str: 0, vit: 0 },
+    { name: 'drink', category: 'drink', label: "ミルク" },
 ];
 
 var inventory = [];

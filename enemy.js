@@ -5,12 +5,17 @@ var enemy_vit = 0;
 var enemy_spd = 0;
 
 var enemy = [
+    //field1
     { name: "mob_ryunohara_a", area: "field1", type: 'minion', nowhp: 20, str: 20, vit: 10, spd: 10 },
     { name: "mob_ryunohara_b", area: "field1", type: 'minion', nowhp: 20, str: 10, vit: 20, spd: 10 },
     { name: "mob_ryunohara_c", area: "field1", type: 'minion', nowhp: 20, str: 10, vit: 10, spd: 20 },
     { name: "mob_ryunohara_d", area: "field1", type: 'boss', nowhp: 20, str: 10, vit: 10, spd: 10 },
 
-    { name: "mob_bat", area: "dungeon1", type: 'mob', nowhp: 20, str: 10, vit: 10, spd: 10 },
+    //
+    { name: "mob_bat", area: "dungeon1", type: 'minion', nowhp: 20, str: 20, vit: 10, spd: 10 },
+    { name: "mob_bat", area: "dungeon1", type: 'minion', nowhp: 20, str: 10, vit: 20, spd: 10 },
+    { name: "mob_bat", area: "dungeon1", type: 'minion', nowhp: 20, str: 10, vit: 10, spd: 20 },
+    { name: "mob_bat", area: "dungeon1", type: 'boss', nowhp: 20, str: 10, vit: 10, spd: 10 },
 ];
 
 var enemy_selected = [];

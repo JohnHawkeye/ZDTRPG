@@ -37,6 +37,12 @@ function CommandEvent(name) {
         case 'explore_dungeon':
             Explore();
             break;
+
+        case 'treasure_leave':
+            gamemode = "free";
+            standImage = "";
+            GenerateCommand();
+            break;
     }
 }
 
@@ -88,6 +94,7 @@ function Explore() {
                 gamemode = "treasure";
                 standImage = "stand_hako";
                 SetTreasure();
+                SetTreasureCommand();
             }
         } else {
             message.push("モンスターが現れた！");
