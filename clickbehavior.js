@@ -131,16 +131,61 @@ function ClickTreasureChipBehavior() {
                     px = Math.floor(px / 64);
                     py = Math.floor(py / 64);
 
-                    cpMapX = px;
-                    cpMapY = py;
-
-                    if (treasure[cpMapX][cpMapY].name === "unopened") {
-                        GetTreasureMessage(treasure[cpMapX][cpMapY].answer);
-                        treasure[cpMapX][cpMapY].name = treasure[cpMapX][cpMapY].answer;
+                    if (treasure[px][py].name === "unopened") {
+                        GetTreasureMessage(treasure[px][py].answer);
+                        treasure[px][py].name = treasure[px][py].answer;
                         treasureReward = true;
                         SetTreasureRewardCommand();
-
+                        //in dungeon
+                        if (dungeon_Searching)
+                            dungeon[dungeon_posX][dungeon_posY].name = "nothing";
                     }
+                    mouseLeftClick_isClicked = true;
+                }
+                break;
+            }
+        }
+    }
+}
+
+
+function ClickDungeonBehavior() {
+
+    let cpx = 0;
+    let cpy = 0;
+    let cpsize = 0;
+
+    for (let i = 0; i < clickPoint.length; i++) {
+
+        if (clickPoint[i].name === 'map') {
+
+            cpx = clickPoint[i].pos_x;
+            cpy = clickPoint[i].pos_y;
+            cpsize = clickPoint[i].size;
+
+            if ((cpx <= mouseX && cpx + cpsize >= mouseX) &&
+                (cpy <= mouseY && cpy + cpsize >= mouseY)) {
+
+                if (mouseLeftClick && !mouseLeftClick_isClicked) {
+
+                    let px = mouseX - cpx;
+                    let py = mouseY - cpy;
+
+                    px = Math.floor(px / 64);
+                    py = Math.floor(py / 64);
+
+                    if ((dungeon_posX - px == -1 && dungeon_posY - py == 0) ||
+                        (dungeon_posX - px == 1 && dungeon_posY - py == 0) ||
+                        (dungeon_posY - py == -1 && dungeon_posX - px == 0) ||
+                        (dungeon_posY - py == 1 && dungeon_posX - px == 0)||
+                        (dungeon_posX == px && dungeon_posY == py)) {
+                        if (dungeon[px][py].name !== "block") {
+                            dungeon_posX = px;
+                            dungeon_posY = py;
+                            DungeonMovingEvent();
+                        }
+                    }
+
 
                     mouseLeftClick_isClicked = true;
 
