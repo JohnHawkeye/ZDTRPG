@@ -42,7 +42,8 @@ function BattleEnemyTrun() {
     let x = Math.floor(Math.random() * 11);
     let y = Math.floor(Math.random() * 11);
 
-    battleEnemyAction = battleChip[x][y].name = battleChip[x][y].answer;
+    battleEnemyAction = battleChip[x][y].answer;
+    battleChip[x][y].name = "enemy_" + battleChip[x][y].answer;
     battleTurn = true;
     BattleCalculate();
 }
@@ -84,11 +85,11 @@ function BattleCalculate() {
     }
 
     let e_damage = p_str - e_vit;
-    if(e_damage <0)
+    if (e_damage < 0)
         e_damage = 0;
-    
+
     let p_damage = e_str - p_vit;
-    if(p_damage <0)
+    if (p_damage < 0)
         p_damage = 0;
 
     //player => enemy
@@ -98,7 +99,7 @@ function BattleCalculate() {
     //enemy => player
     message.push(p_damage + "のダメージを受けてしまった！");
     player_nowhp -= p_damage;
-    
+
     if (enemy_nowhp <= 0) {
         GenerateCommand();
         message.push("モンスターを倒した！");
@@ -107,7 +108,17 @@ function BattleCalculate() {
         enemy_name = "";
         SetBattleRewardCommand();
         battleReward = true;
-        
+
+        //in dungeon
+        if (dungeon_Searching){
+            if(dungeon[dungeon_posX][dungeon_posY].name === "minion"){
+                dungeon[dungeon_posX][dungeon_posY].name = "nothing";
+            }else{
+                dungeon[dungeon_posX][dungeon_posY].name = "start";
+            }
+            
+        }
+
         player_zp++;
     }
 }

@@ -20,7 +20,15 @@ function Render() {
             break;
         case "treasure":
             DrawingTreasurechip();
-            break;    
+            break;
+        case "dungeon":
+            DrawingDungeonchip();
+            break;
+        case "npc":
+            if (dungeon_Searching) {
+                DrawingDungeonchip();
+            }
+            break;
         default:
             DrawingWorldIcon();
             break;
@@ -95,6 +103,28 @@ function DrawingTreasurechip() {
 
         }
     }
+}
+
+function DrawingDungeonchip() {
+    let offset_x = 448;
+    let offset_y = 98;
+
+    for (let i = 0; i < dungeon.length; i++) {
+        for (let j = 0; j < dungeon[i].length; j++) {
+
+            if (typeof Asset.icon_map[dungeon[i][j].name] !== 'undefined') {
+                ctx.drawImage(Asset.images['icon_map'],
+                    Asset.icon_map[dungeon[i][j].name].sx, Asset.icon_map[dungeon[i][j].name].sy, 64, 64,
+                    64 * i + offset_x, 64 * j + offset_y,
+                    64, 64);
+            }
+
+        }
+    }
+    //pin
+
+    ctx.drawImage(Asset.images['pin'],
+        64 * dungeon_posX + offset_x, 64 * dungeon_posY + offset_y - 64);
 }
 
 
@@ -199,8 +229,8 @@ function DrawingEquip() {
                 64, 64);
         }
         line++;
-        if(line >=5){
-            line =0;
+        if (line >= 5) {
+            line = 0;
             row = 64;
         }
 
@@ -226,20 +256,40 @@ function DrawingStand() {
 
     let sx = 0;
     let sy = 0;
+    let size_w = 0;
+    let size_h = 0;
+    let bigger = 0;
+    let rate = 0;
 
     if (typeof Asset.images[standImage] !== 'undefined') {
 
         sx = (SCREEN_WIDTH - Asset.images[standImage].width) / 2;
         sy = (SCREEN_HEIGHT - Asset.images[standImage].height) / 2;
+        size_w = Asset.images[standImage].width;
+        size_h = Asset.images[standImage].height;
 
         //battle mode
         if (gamemode === "battle" || gamemode === "treasure") {
             sx = 1184 + 384 / 2, sy = 34 + 416 / 2;
-            sx -= Asset.images[standImage].width / 2;
-            sy -= Asset.images[standImage].height / 2;
+
+            if (size_w > 384 || size_h > 384) {
+                bigger = (size_w > size_h) ? size_w : size_h;
+
+                rate = (Math.round((bigger / 384) * 100) / 100);
+                Math.floor(rate * size_w);
+                size_w = Math.floor(size_w/rate);
+                size_h = Math.floor(size_h/rate);
+                sx -= size_w / 2;
+                sy -= size_h / 2;
+            } else {
+                sx -= Asset.images[standImage].width / 2;
+                sy -= Asset.images[standImage].height / 2;
+            }
         }
 
-        ctx.drawImage(Asset.images[standImage], sx, sy);
+        ctx.drawImage(Asset.images[standImage], 0, 0,
+            Asset.images[standImage].width, Asset.images[standImage].height,
+            sx, sy, size_w, size_h);
     }
 }
 

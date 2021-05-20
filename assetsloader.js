@@ -53,6 +53,35 @@ Asset.assets = [
 	{ type: 'image', name: 'mob_tumeato_c', src: 'Assets/Images/mob_tumeato_c.png' },
 	{ type: 'image', name: 'mob_tumeato_d', src: 'Assets/Images/mob_tumeato_d.png' },
 
+	{ type: 'image', name: 'mob_sinden_d', src: 'Assets/Images/mob_sinden_d.png' },
+	{ type: 'image', name: 'mob_sinden_c', src: 'Assets/Images/mob_sinden_c.png' },
+	{ type: 'image', name: 'mob_sinden_b', src: 'Assets/Images/mob_sinden_b.png' },
+	{ type: 'image', name: 'mob_sinden_a', src: 'Assets/Images/mob_sinden_a.png' },
+	{ type: 'image', name: 'mob_lava_d', src: 'Assets/Images/mob_lava_d.png' },
+	{ type: 'image', name: 'mob_lava_c', src: 'Assets/Images/mob_lava_c.png' },
+	{ type: 'image', name: 'mob_lava_b', src: 'Assets/Images/mob_lava_b.png' },
+	{ type: 'image', name: 'mob_lava_a', src: 'Assets/Images/mob_lava_a.png' },
+	{ type: 'image', name: 'mob_rust_d', src: 'Assets/Images/mob_rust_d.png' },
+	{ type: 'image', name: 'mob_rust_c', src: 'Assets/Images/mob_rust_c.png' },
+	{ type: 'image', name: 'mob_rust_b', src: 'Assets/Images/mob_rust_b.png' },
+	{ type: 'image', name: 'mob_rust_a', src: 'Assets/Images/mob_rust_a.png' },
+	{ type: 'image', name: 'mob_oubo_d', src: 'Assets/Images/mob_oubo_d.png' },
+	{ type: 'image', name: 'mob_oubo_c', src: 'Assets/Images/mob_oubo_c.png' },
+	{ type: 'image', name: 'mob_oubo_b', src: 'Assets/Images/mob_oubo_b.png' },
+	{ type: 'image', name: 'mob_oubo_a', src: 'Assets/Images/mob_oubo_a.png' },
+	{ type: 'image', name: 'mob_arinosu_d', src: 'Assets/Images/mob_arinosu_d.png' },
+	{ type: 'image', name: 'mob_arinosu_c', src: 'Assets/Images/mob_arinosu_c.png' },
+	{ type: 'image', name: 'mob_arinosu_b', src: 'Assets/Images/mob_arinosu_b.png' },
+	{ type: 'image', name: 'mob_arinosu_a', src: 'Assets/Images/mob_arinosu_a.png' },
+	{ type: 'image', name: 'mob_suradou_d', src: 'Assets/Images/mob_suradou_d.png' },
+	{ type: 'image', name: 'mob_suradou_c', src: 'Assets/Images/mob_suradou_c.png' },
+	{ type: 'image', name: 'mob_suradou_b', src: 'Assets/Images/mob_suradou_b.png' },
+	{ type: 'image', name: 'mob_suradou_a', src: 'Assets/Images/mob_suradou_a.png' },
+	{ type: 'image', name: 'mob_piyodou_d', src: 'Assets/Images/mob_piyodou_d.png' },
+	{ type: 'image', name: 'mob_piyodou_c', src: 'Assets/Images/mob_piyodou_c.png' },
+	{ type: 'image', name: 'mob_piyodou_b', src: 'Assets/Images/mob_piyodou_b.png' },
+	{ type: 'image', name: 'mob_piyodou_a', src: 'Assets/Images/mob_piyodou_a.png' },
+
 	//scenery
 	{ type: 'image', name: 'scenery_doukutu', src: 'Assets/Images/scenery_doukutu.png' },
 	{ type: 'image', name: 'scenery_mati', src: 'Assets/Images/scenery_mati.png' },
@@ -87,7 +116,8 @@ Asset.assets = [
 	{ type: 'image', name: 'stand_sika', src: 'Assets/Images/stand_sika.png' },
 	{ type: 'image', name: 'stand_lion', src: 'Assets/Images/stand_lion.png' },
 	{ type: 'image', name: 'stand_d_soldier', src: 'Assets/Images/stand_d_soldier.png' },
-	{ type: 'image', name: 'stand_mouko', src: 'Assets/Images/stand_mouko.png'},
+	{ type: 'image', name: 'stand_mouko', src: 'Assets/Images/stand_mouko.png' },
+	{ type: 'image', name: 'stand_kitune', src: 'Assets/Images/stand_kitune.png' },
 ];
 
 //icon image position
@@ -149,6 +179,21 @@ Asset.icon_map = {
 	dungeon5: { sx: 256, sy: 320 },
 	dungeon6: { sx: 320, sy: 320 },
 	dungeon7: { sx: 384, sy: 320 },
+
+	nothing: { sx: 0, sy: 384 },
+	block: { sx: 64, sy: 384 },
+	minion: { sx: 128, sy: 384 },
+	boss: { sx: 192, sy: 384 },
+	obstacle: { sx: 256, sy: 384 },
+	pit: { sx: 320, sy: 384 },
+	start: { sx: 384, sy: 384 },
+	treasure: { sx: 64, sy: 0 },
+	
+	enemy_attack: { sx: 64, sy: 448 },
+	enemy_defend: { sx: 128, sy: 448 },
+	enemy_critical: { sx: 192, sy: 448 },
+	enemy_special: { sx: 256, sy: 448 },
+	enemy_miss: { sx: 320, sy: 448 },
 };
 
 

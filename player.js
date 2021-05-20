@@ -1,5 +1,5 @@
 
-var player_nowhp = 100;
+var player_nowhp = 1000;
 var player_maxhp = 100;
 var player_str = 10;
 var player_vit = 10;

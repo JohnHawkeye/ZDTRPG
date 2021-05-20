@@ -33,10 +33,15 @@ function Process() {
                         BattleEnemyTrun();
                     }
                 break;
+
             case 'treasure':
                 if (!treasureReward) {
                     ClickTreasureChipBehavior();
                 }
+                break;
+
+            case 'dungeon':
+                ClickDungeonBehavior();
                 break;
         }
 
@@ -59,11 +64,13 @@ function Prepare() {
         world[i] = [];
         battleChip[i] = [];
         treasure[i] = [];
+        dungeon[i] =[];
 
         for (let j = 0; j < 11; j++) {
             world[i][j] = { type: 0, name: '', level: 0 };
             battleChip[i][j] = { name: 'action' };
             treasure[i][j] = { name: 'nothing', answer: 'empty' };  //nothing, unopened, name, trap, coin, empty
+            dungeon[i][j] = { };
 
             if (i == 5 && j == 5) {
                 world[i][j] = { type: 2, name: 'myhome', level: 0 };
@@ -90,40 +97,6 @@ function InitAreaData() {
     command = [];
 }
 
-function GenerateCommand() {
-
-    command = [];
-    cmdOver = -1;
-
-    switch (cpMapID) {
-        case 2:
-            command = [
-                { name: 'explore', label: '－何かないか探す', pos_x: 1184, pos_y: 674 },
-                { name: 'sleep', label: '－休む', pos_x: 1184, pos_y: 706 }
-            ];
-            break;
-
-        case 3:
-            command = [
-                { name: 'talk_npc', label: '－町の人と話す', pos_x: 1184, pos_y: 674 },
-            ];
-            break;
-
-        case 4:
-            command = [
-                { name: 'explore_field', label: '－探索する', pos_x: 1184, pos_y: 674 }
-            ];
-            break;
-
-        case 5:
-            command = [
-                { name: 'explore_dungeon', label: '－探索する', pos_x: 1184, pos_y: 674 }
-            ];
-            break;
-    }
-
-}
-
 function SetAreaData() {
 
     switch (cpMapID) {
@@ -136,7 +109,7 @@ function SetAreaData() {
         case 4://field
             message.push("岩肌の多い風景が続く。");
             break;
-        case 5://gungeon
+        case 5://dungeon
             message.push("洞窟だ。何かがすんでいるようだ。");
             break;
     }
