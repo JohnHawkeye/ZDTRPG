@@ -64,13 +64,13 @@ function Prepare() {
         world[i] = [];
         battleChip[i] = [];
         treasure[i] = [];
-        dungeon[i] =[];
+        dungeon[i] = [];
 
         for (let j = 0; j < 11; j++) {
             world[i][j] = { type: 0, name: '', level: 0 };
             battleChip[i][j] = { name: 'action' };
             treasure[i][j] = { name: 'nothing', answer: 'empty' };  //nothing, unopened, name, trap, coin, empty
-            dungeon[i][j] = { };
+            dungeon[i][j] = {};
 
             if (i == 5 && j == 5) {
                 world[i][j] = { type: 2, name: 'myhome', level: 0 };
@@ -82,11 +82,6 @@ function Prepare() {
     world[6][5] = { type: 1, name: 'undeveloped', level: 1 };
     world[5][4] = { type: 1, name: 'undeveloped', level: 1 };
     world[5][6] = { type: 1, name: 'undeveloped', level: 1 };
-
-    //click point
-    clickPoint = [
-        { name: 'map', pos_x: 448, pos_y: 98, size: 704 },
-    ];
 
     //player equip state
     PlayerEquipAddition();
@@ -175,4 +170,84 @@ function GenerateArea(x, y) {
             world[x][y + 1].name = 'undeveloped';
         }
     }
+}
+
+function DataAllClear() {
+    //process
+    gamemode = "free";
+    world = [];
+    flg_prepare = false;
+    treasure = [];
+    treasureReward = false;
+
+    //battlesystem
+    battleChip = [];
+    battleTurn = true;
+    battlePlayerAction = "";
+    battleEnemyAction = "";
+    battleReward = false;
+
+    //clickbehavior
+    cpMapX = 0;
+    cpMapY = 0;
+    cpMapID = 0;
+    cpMapName = "";
+    cpPickX = 0;
+    cpPickY = 0;
+    command = [];
+    cmdName = "";
+    cmdOver = -1;
+
+    //drawing
+    standImage = "";
+
+    //dungeon
+    dungeon = [];
+    dungeon_posX = 0;
+    dungeon_posY = 0;
+    dungeon_Searching = false;
+
+    //enemy
+    enemy_name = "";
+    enemy_nowhp = 0;
+    enemy_str = 0;
+    enemy_vit = 0;
+    enemy_spd = 0;
+    enemy_selected = [];
+
+    //flags
+    flags.npc = { sika: false, lion: false, d_soldier: false, mouko: false };
+
+    //item
+    inventory = [];
+
+    //message
+    message = [];
+
+    //player
+    player_nowhp = 100;
+    player_maxhp = 100;
+    player_str = 10;
+    player_vit = 10;
+    player_spd = 10;
+
+    player_equip_str = 0;
+    player_equip_vit = 0;
+    player_equip_spd = 0;
+
+    player_money = 1000;
+    player_zp = 100;
+
+    player_equip = [
+        { type: "left", name: "", str: 0, vit: 0 },
+        { type: "right", name: "", str: 0, vit: 0 },
+        { type: "outer", name: "outer", str: 0, vit: 5 },
+        { type: "pants", name: "pants", str: 0, vit: 5 },
+        { type: "helmet", name: "", str: 0, vit: 0 },
+        { type: "ring", name: "", str: 0, vit: 0 },
+        { type: "brcelet", name: "", str: 0, vit: 0 },
+        { type: "necklace", name: "necklace", str: 0, vit: 0 },
+        { type: "shoes", name: "shoes", str: 0, vit: 0 },
+        { type: "artifact", name: "", str: 0, vit: 0 }
+    ];
 }

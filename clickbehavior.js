@@ -1,5 +1,7 @@
 
-var clickPoint = [];
+var clickPointX = 448;
+var clickPointY = 98;
+var clickPointSize = 704;
 var cpMapX = 0;
 var cpMapY = 0;
 var cpMapID = 0;
@@ -18,50 +20,40 @@ function ClickPointBehavior() {
     let cpy = 0;
     let cpsize = 0;
 
-    for (let i = 0; i < clickPoint.length; i++) {
+    cpx = clickPointX;
+    cpy = clickPointY;
+    cpsize = clickPointSize;
 
-        if (clickPoint[i].name === 'map') {
+    if ((cpx <= mouseX && cpx + cpsize >= mouseX) &&
+        (cpy <= mouseY && cpy + cpsize >= mouseY)) {
 
-            cpx = clickPoint[i].pos_x;
-            cpy = clickPoint[i].pos_y;
-            cpsize = clickPoint[i].size;
+        if (mouseLeftClick && !mouseLeftClick_isClicked) {
 
-            if ((cpx <= mouseX && cpx + cpsize >= mouseX) &&
-                (cpy <= mouseY && cpy + cpsize >= mouseY)) {
+            let px = mouseX - cpx;
+            let py = mouseY - cpy;
 
-                if (mouseLeftClick && !mouseLeftClick_isClicked) {
+            px = Math.floor(px / 64);
+            py = Math.floor(py / 64);
 
-                    let px = mouseX - cpx;
-                    let py = mouseY - cpy;
+            cpPickX = cpMapX = px;
+            cpPickY = cpMapY = py;
 
-                    px = Math.floor(px / 64);
-                    py = Math.floor(py / 64);
+            cpMapID = world[cpMapX][cpMapY].type;
+            cpMapName = world[cpMapX][cpMapY].name;
 
-                    cpPickX = cpMapX = px;
-                    cpPickY = cpMapY = py;
+            InitAreaData();
 
-                    cpMapID = world[cpMapX][cpMapY].type;
-                    cpMapName = world[cpMapX][cpMapY].name;
-
-                    InitAreaData();
-
-                    if (cpMapID != 1) {
-                        GenerateCommand();
-                        SetAreaData();
-                    } else {
-                        if (player_zp >= world[cpMapX][cpMapY].level) {
-                            GenerateArea(cpMapX, cpMapY);
-                        } else {
-                            message.push("ZPが足りない。");
-                        }
-                    }
-
-                    mouseLeftClick_isClicked = true;
-
+            if (cpMapID != 1) {
+                GenerateCommand();
+                SetAreaData();
+            } else {
+                if (player_zp >= world[cpMapX][cpMapY].level) {
+                    GenerateArea(cpMapX, cpMapY);
+                } else {
+                    message.push("ZPが足りない。");
                 }
-
-                break;
             }
+            mouseLeftClick_isClicked = true;
         }
     }
 }
@@ -72,35 +64,28 @@ function ClickBattleChipBehavior() {
     let cpy = 0;
     let cpsize = 0;
 
-    for (let i = 0; i < clickPoint.length; i++) {
+    cpx = clickPointX;
+    cpy = clickPointY;
+    cpsize = clickPointSize;
 
-        if (clickPoint[i].name === 'map') {
+    if ((cpx <= mouseX && cpx + cpsize >= mouseX) &&
+        (cpy <= mouseY && cpy + cpsize >= mouseY)) {
 
-            cpx = clickPoint[i].pos_x;
-            cpy = clickPoint[i].pos_y;
-            cpsize = clickPoint[i].size;
+        if (mouseLeftClick && !mouseLeftClick_isClicked) {
 
-            if ((cpx <= mouseX && cpx + cpsize >= mouseX) &&
-                (cpy <= mouseY && cpy + cpsize >= mouseY)) {
+            let px = mouseX - cpx;
+            let py = mouseY - cpy;
 
-                if (mouseLeftClick && !mouseLeftClick_isClicked) {
+            px = Math.floor(px / 64);
+            py = Math.floor(py / 64);
 
-                    let px = mouseX - cpx;
-                    let py = mouseY - cpy;
+            cpMapX = px;
+            cpMapY = py;
 
-                    px = Math.floor(px / 64);
-                    py = Math.floor(py / 64);
+            BattlePlayerTrun();
+            battleTurn = false;
 
-                    cpMapX = px;
-                    cpMapY = py;
-
-                    BattlePlayerTrun();
-                    battleTurn = false;
-
-                    mouseLeftClick_isClicked = true;
-                }
-                break;
-            }
+            mouseLeftClick_isClicked = true;
         }
     }
 }
@@ -112,38 +97,31 @@ function ClickTreasureChipBehavior() {
     let cpy = 0;
     let cpsize = 0;
 
-    for (let i = 0; i < clickPoint.length; i++) {
+    cpx = clickPointX;
+    cpy = clickPointY;
+    cpsize = clickPointSize;
 
-        if (clickPoint[i].name === 'map') {
+    if ((cpx <= mouseX && cpx + cpsize >= mouseX) &&
+        (cpy <= mouseY && cpy + cpsize >= mouseY)) {
 
-            cpx = clickPoint[i].pos_x;
-            cpy = clickPoint[i].pos_y;
-            cpsize = clickPoint[i].size;
+        if (mouseLeftClick && !mouseLeftClick_isClicked) {
 
-            if ((cpx <= mouseX && cpx + cpsize >= mouseX) &&
-                (cpy <= mouseY && cpy + cpsize >= mouseY)) {
+            let px = mouseX - cpx;
+            let py = mouseY - cpy;
 
-                if (mouseLeftClick && !mouseLeftClick_isClicked) {
+            px = Math.floor(px / 64);
+            py = Math.floor(py / 64);
 
-                    let px = mouseX - cpx;
-                    let py = mouseY - cpy;
-
-                    px = Math.floor(px / 64);
-                    py = Math.floor(py / 64);
-
-                    if (treasure[px][py].name === "unopened") {
-                        GetTreasureMessage(treasure[px][py].answer);
-                        treasure[px][py].name = treasure[px][py].answer;
-                        treasureReward = true;
-                        SetTreasureRewardCommand();
-                        //in dungeon
-                        if (dungeon_Searching)
-                            dungeon[dungeon_posX][dungeon_posY].name = "nothing";
-                    }
-                    mouseLeftClick_isClicked = true;
-                }
-                break;
+            if (treasure[px][py].name === "unopened") {
+                GetTreasureMessage(treasure[px][py].answer);
+                treasure[px][py].name = treasure[px][py].answer;
+                treasureReward = true;
+                SetTreasureRewardCommand();
+                //in dungeon
+                if (dungeon_Searching)
+                    dungeon[dungeon_posX][dungeon_posY].name = "nothing";
             }
+            mouseLeftClick_isClicked = true;
         }
     }
 }
@@ -155,44 +133,33 @@ function ClickDungeonBehavior() {
     let cpy = 0;
     let cpsize = 0;
 
-    for (let i = 0; i < clickPoint.length; i++) {
+    cpx = clickPointX;
+    cpy = clickPointY;
+    cpsize = clickPointSize;
 
-        if (clickPoint[i].name === 'map') {
+    if ((cpx <= mouseX && cpx + cpsize >= mouseX) &&
+        (cpy <= mouseY && cpy + cpsize >= mouseY)) {
 
-            cpx = clickPoint[i].pos_x;
-            cpy = clickPoint[i].pos_y;
-            cpsize = clickPoint[i].size;
+        if (mouseLeftClick && !mouseLeftClick_isClicked) {
 
-            if ((cpx <= mouseX && cpx + cpsize >= mouseX) &&
-                (cpy <= mouseY && cpy + cpsize >= mouseY)) {
+            let px = mouseX - cpx;
+            let py = mouseY - cpy;
 
-                if (mouseLeftClick && !mouseLeftClick_isClicked) {
+            px = Math.floor(px / 64);
+            py = Math.floor(py / 64);
 
-                    let px = mouseX - cpx;
-                    let py = mouseY - cpy;
-
-                    px = Math.floor(px / 64);
-                    py = Math.floor(py / 64);
-
-                    if ((dungeon_posX - px == -1 && dungeon_posY - py == 0) ||
-                        (dungeon_posX - px == 1 && dungeon_posY - py == 0) ||
-                        (dungeon_posY - py == -1 && dungeon_posX - px == 0) ||
-                        (dungeon_posY - py == 1 && dungeon_posX - px == 0)||
-                        (dungeon_posX == px && dungeon_posY == py)) {
-                        if (dungeon[px][py].name !== "block") {
-                            dungeon_posX = px;
-                            dungeon_posY = py;
-                            DungeonMovingEvent();
-                        }
-                    }
-
-
-                    mouseLeftClick_isClicked = true;
-
+            if ((dungeon_posX - px == -1 && dungeon_posY - py == 0) ||
+                (dungeon_posX - px == 1 && dungeon_posY - py == 0) ||
+                (dungeon_posY - py == -1 && dungeon_posX - px == 0) ||
+                (dungeon_posY - py == 1 && dungeon_posX - px == 0) ||
+                (dungeon_posX == px && dungeon_posY == py)) {
+                if (dungeon[px][py].name !== "block") {
+                    dungeon_posX = px;
+                    dungeon_posY = py;
+                    DungeonMovingEvent();
                 }
-
-                break;
             }
+            mouseLeftClick_isClicked = true;
         }
     }
 }
@@ -218,6 +185,7 @@ function ClickCommandBehavior() {
                 cmdName = command[i].name;
                 CommandEvent(cmdName);
                 CommandBattleEvent(cmdName);
+                ShoppingCommand(cmdName,command[i].value,command[i].price);
                 mouseLeftClick_isClicked = true;
             }
             break;
@@ -259,9 +227,10 @@ function ClickInventoryBehavior() {
                 PlayerEquipAddition();
 
                 //Consumables
-                if (inventory[i].category === "drink") {
-                    let an = 20;
+                if (inventory[i].category === "consumable") {
+                    let an = inventory[i].recovery;
                     player_nowhp = (player_nowhp + an > player_maxhp) ? player_maxhp : player_nowhp + an;
+                    message.push(inventory[i].label + "を使用した。");
                     message.push("体力が" + an + "回復した。");
                 }
 

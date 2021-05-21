@@ -64,7 +64,7 @@ function DrawingWorldIcon() {
         }
     }
     //pin
-    if (cpMapID >= 2)
+    if (cpMapID >= 1)
         ctx.drawImage(Asset.images['pin'],
             64 * cpPickX + offset_x, 64 * cpPickY + offset_y - 64);
 }

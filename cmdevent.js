@@ -4,6 +4,8 @@ function GenerateCommand() {
     command = [];
     cmdOver = -1;
 
+    let ls = 32;
+
     switch (cpMapID) {
         case 2:
             command = [
@@ -15,6 +17,7 @@ function GenerateCommand() {
         case 3:
             command = [
                 { name: 'talk_npc', label: '－町の人と話す', pos_x: 1184, pos_y: 674 },
+                { name: 'shopping', label: '－お買い物をする', pos_x: 1184, pos_y: 674 +ls },
             ];
             break;
 
@@ -54,6 +57,11 @@ function CommandEvent(name) {
 
         case 'friend_want':
             ReactionNpcFriend();
+            break;
+
+        case 'shopping':
+            Shopping();
+            gamemode = "npc";
             break;
 
         case 'seeyou':
