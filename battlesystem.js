@@ -35,7 +35,6 @@ function SetBattleChip() {
 
 function BattlePlayerTrun() {
     battlePlayerAction = battleChip[cpMapX][cpMapY].name = battleChip[cpMapX][cpMapY].answer;
-
 }
 
 function BattleEnemyTrun() {

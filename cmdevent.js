@@ -17,7 +17,7 @@ function GenerateCommand() {
         case 3:
             command = [
                 { name: 'talk_npc', label: '－町の人と話す', pos_x: 1184, pos_y: 674 },
-                { name: 'shopping', label: '－お買い物をする', pos_x: 1184, pos_y: 674 +ls },
+                { name: 'shopping', label: '－お買い物をする', pos_x: 1184, pos_y: 674 + ls },
             ];
             break;
 
@@ -104,6 +104,8 @@ function CommandEvent(name) {
             break;
 
         case 'dungeon_escape':
+            cpMapX = cpPickX;
+            cpMapY = cpPickY;
             gamemode = "free";
             dungeon_Searching = false;
             GenerateCommand();
@@ -146,6 +148,8 @@ function CommandBattleEvent(name) {
             gamemode = "free";
             //in dungeon
             gamemode = (dungeon_Searching) ? "dungeon" : "free";
+            battlePlayerAction = "";
+            battleEnemyAction ="";
 
             battleReward = false;
             GenerateCommand();
@@ -169,18 +173,44 @@ function Explore() {
 
         player_nowhp -= world[cpMapX][cpMapY].level * 10;
 
-        let rn = Math.floor(Math.random() * 5);
+        let rn = Math.floor(Math.random() * 10);
+        rn = 6;
 
-        if (rn <= 2) {
-            rn = Math.floor(Math.random() * 5);
-            if (rn != 0) {
+        if (rn >= 6) {
+            rn = Math.floor(Math.random() * 10);
+            if (rn >= 2) {
                 message.push("特に何も見つからなかった。");
             } else {
-                message.push("宝箱を発見した！");
-                gamemode = "treasure";
-                standImage = "stand_hako";
-                SetTreasure();
-                SetTreasureCommand();
+
+                //detect town or dungeon
+                rn = Math.floor(Math.random() * 2);
+                if (rn == 0) {
+                    if (!flags.map[world[cpMapX][cpMapY].level].town) {
+                        SelectTownLevel(world[cpMapX][cpMapY].level, cpMapX, cpMapY);
+                        message.push("町を発見した！");
+                        world[cpMapX][cpMapY].type = 3;
+                        flags.map[world[cpMapX][cpMapY].level].town = true;
+                    } else {
+                        message.push("これ以上は見つからなさそうだ。");
+                    }
+
+                } else {
+                    if (!flags.map[world[cpMapX][cpMapY].level].dungeon) {
+                        SelectDungeonLevel(world[cpMapX][cpMapY].level, cpMapX, cpMapY);
+                        message.push("ダンジョンを発見した！");
+                        world[cpMapX][cpMapY].type = 5;
+                        flags.map[world[cpMapX][cpMapY].level].dungeon = true;
+                    } else {
+                        message.push("これ以上は見つからなさそうだ。");
+                    }
+                }
+
+
+                //map data update
+                cpMapID = world[cpMapX][cpMapY].type;
+                cpMapName = world[cpMapX][cpMapY].name;
+                GenerateCommand();
+                SetAreaData();
             }
         } else {
             message.push("モンスターが現れた！");

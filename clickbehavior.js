@@ -35,22 +35,30 @@ function ClickPointBehavior() {
             px = Math.floor(px / 64);
             py = Math.floor(py / 64);
 
-            cpPickX = cpMapX = px;
-            cpPickY = cpMapY = py;
 
-            cpMapID = world[cpMapX][cpMapY].type;
-            cpMapName = world[cpMapX][cpMapY].name;
+            if ((cpMapX - px == -1 && cpMapY - py == 0) ||
+                (cpMapX - px == 1 && cpMapY - py == 0) ||
+                (cpMapY - py == -1 && cpMapX - px == 0) ||
+                (cpMapY - py == 1 && cpMapX - px == 0) ||
+                (cpMapX == px && cpMapY == py)) {
 
-            InitAreaData();
+                cpPickX = cpMapX = px;
+                cpPickY = cpMapY = py;
 
-            if (cpMapID != 1) {
-                GenerateCommand();
-                SetAreaData();
-            } else {
-                if (player_zp >= world[cpMapX][cpMapY].level) {
-                    GenerateArea(cpMapX, cpMapY);
+                cpMapID = world[cpMapX][cpMapY].type;
+                cpMapName = world[cpMapX][cpMapY].name;
+
+                InitAreaData();
+
+                if (cpMapID != 1) {
+                    GenerateCommand();
+                    SetAreaData();
                 } else {
-                    message.push("ZPが足りない。");
+                    if (player_zp >= world[cpMapX][cpMapY].level) {
+                        GenerateArea(cpMapX, cpMapY);
+                    } else {
+                        message.push("ZPが足りない。");
+                    }
                 }
             }
             mouseLeftClick_isClicked = true;
@@ -185,7 +193,8 @@ function ClickCommandBehavior() {
                 cmdName = command[i].name;
                 CommandEvent(cmdName);
                 CommandBattleEvent(cmdName);
-                ShoppingCommand(cmdName,command[i].value,command[i].price);
+                if (cmdName === "shopping_buy" || cmdName === "shopping_end")
+                    ShoppingCommand(cmdName, command[i].value, command[i].price);
                 mouseLeftClick_isClicked = true;
             }
             break;

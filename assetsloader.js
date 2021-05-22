@@ -148,6 +148,8 @@ Asset.icon_map = {
 	hit: { sx: 320, sy: 0 },
 
 	myhome: { sx: 0, sy: 64 },
+	land: { sx: 0, sy: 384 },
+	ocean: { sx: 64, sy: 64 },
 
 	action: { sx: 0, sy: 128 },
 	attack: { sx: 64, sy: 128 },

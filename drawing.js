@@ -277,8 +277,8 @@ function DrawingStand() {
 
                 rate = (Math.round((bigger / 384) * 100) / 100);
                 Math.floor(rate * size_w);
-                size_w = Math.floor(size_w/rate);
-                size_h = Math.floor(size_h/rate);
+                size_w = Math.floor(size_w / rate);
+                size_h = Math.floor(size_h / rate);
                 sx -= size_w / 2;
                 sy -= size_h / 2;
             } else {
@@ -310,6 +310,18 @@ function DrawingEnemyHealth() {
         ctx.fillStyle = "rgb(96,49,0)";
         ctx.fillText("敵の体力: " + enemy_nowhp, CENTER_X, 32);
         ctx.fillText("あなたの体力: " + player_nowhp, CENTER_X, 840);
+
+        //selected battle panel
+        if (typeof Asset.icon_map[battlePlayerAction] !== 'undefined') {
+            ctx.drawImage(Asset.images['icon_map'],
+                Asset.icon_map[battlePlayerAction].sx, Asset.icon_map[battlePlayerAction].sy, 64, 64,
+                448+64, 824, 64, 64);
+        }
+        if (typeof Asset.icon_map[battleEnemyAction] !== 'undefined') {
+            ctx.drawImage(Asset.images['icon_map'],
+                Asset.icon_map[battleEnemyAction].sx, Asset.icon_map[battleEnemyAction].sy, 64, 64,
+                448+64, 16, 64, 64);
+        }
     }
 
     if (battleReward) {
