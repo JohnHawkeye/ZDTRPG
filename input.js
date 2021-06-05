@@ -32,6 +32,9 @@ var mouseLeftClick_isClicked = false;
 var mouseRightClick = false;
 var mouseRightClick_isClicked = false;
 
+//touch
+var touchFlag = false;
+
 //
 //key events
 function KeyDoun(e) {
@@ -40,15 +43,15 @@ function KeyDoun(e) {
         pressedKeys[0] = true;
     }
 
-    if(e.keyCode == 27){
+    if (e.keyCode == 27) {
         pressedKeys[27] = true;
     }
 
-    if(e.keyCode == 38){
+    if (e.keyCode == 38) {
         pressedKeys[38] = true;
     }
 
-    if(e.keyCode == 40){
+    if (e.keyCode == 40) {
         pressedKeys[40] = true;
     }
 
@@ -61,14 +64,14 @@ function KeyUp(e) {
         pressedKeys[0] = false;
     }
 
-    if(e.keyCode == 27){
+    if (e.keyCode == 27) {
         pressedKeys[27] = false;
     }
 
-    if(e.keyCode == 38){
+    if (e.keyCode == 38) {
         pressedKeys[38] = false;
     }
-    if(e.keyCode == 40){
+    if (e.keyCode == 40) {
         pressedKeys[40] = false;
     }
 
@@ -143,35 +146,61 @@ function PressedKeyWait() {
 //
 //mouse events
 function onMouseDown(e) {
-    if (e.button == 0) {
-        mouseLeftClick = true;
-    } else
-        if (e.button == 2) {
-            mouseRightClick = true;
-        }
+    if (!touchFlag)
+        if (e.button == 0) {
+            mouseLeftClick = true;
+        } else
+            if (e.button == 2) {
+                mouseRightClick = true;
+            }
 }
 
 function onMouseUp(e) {
-
-    if (e.button == 0) {
-        mouseLeftClick = false;
-        mouseLeftClick_isClicked = false;
-    } else
-        if (e.button == 2) {
-            mouseRightClick = false;
-            mouseRightClick_isClicked = false;
-        }
+    if (!touchFlag)
+        if (e.button == 0) {
+            mouseLeftClick = false;
+            mouseLeftClick_isClicked = false;
+        } else
+            if (e.button == 2) {
+                mouseRightClick = false;
+                mouseRightClick_isClicked = false;
+            }
 }
 
 function onMouseMove(e) {
+    if (!touchFlag) {
+        var rect = canvas.getBoundingClientRect();
 
-    var rect = canvas.getBoundingClientRect();
-
-    mouseX = Math.floor(e.clientX - rect.left);
-    mouseY = Math.floor(e.clientY - rect.top);
+        mouseX = Math.floor(e.clientX - rect.left);
+        mouseY = Math.floor(e.clientY - rect.top);
+    }
 
 }
 
-function mouseWheel(e){
+function mouseWheel(e) {
 
+}
+
+//touch
+function handleStart(e) {
+
+    var touchObject = e.changedTouches[0];
+    var touchX = touchObject.pageX;
+    var touchY = touchObject.pageY;
+
+    var rect = canvas.getBoundingClientRect();
+
+    var posX = rect.left + window.pageXOffset;
+    var posY = rect.top + window.pageYOffset;
+
+    mouseX = Math.floor(touchX - posX);
+    mouseY = Math.floor(touchY - posY);
+
+    touchFlag = true;
+    mouseLeftClick = true;
+}
+
+function handleEnd() {
+    mouseLeftClick = false;
+    mouseLeftClick_isClicked = false;
 }

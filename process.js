@@ -25,51 +25,65 @@ var flg_prepare = false;
 var treasure = [];
 var treasureReward = false;
 
+var gameover = false;
+
 function Process() {
 
-    if (!flg_prepare) {
-        Prepare();
-        flg_prepare = true;
-    } else {
+    if (!data_waiting)
+        if (!gameover) {
+            if (!flg_prepare) {
+                Prepare();
+                flg_prepare = true;
+            } else {
+                switch (gamemode) {
+                    case 'free':
+                        ClickPointBehavior();
+                        break;
 
-        switch (gamemode) {
-            case 'free':
-                ClickPointBehavior();
-                break;
+                    case 'npc':
+                        break;
 
-            case 'npc':
-                break;
+                    case 'battle':
+                        if (!battleReward)
+                            if (battleTurn) {
+                                if (!battleChipSetEnd) {
+                                    WaitingBattleChipSet();
+                                } else {
+                                    ClickBattleChipBehavior();
+                                }
 
-            case 'battle':
-                if (!battleReward)
-                    if (battleTurn) {
-                        ClickBattleChipBehavior();
-                    } else {
-                        BattleEnemyTrun();
-                    }
-                break;
+                            } else {
+                                BattleEnemyTrun();
+                            }
+                        break;
 
-            case 'treasure':
-                if (!treasureReward) {
-                    ClickTreasureChipBehavior();
+                    case 'treasure':
+                        if (!treasureReward) {
+                            ClickTreasureChipBehavior();
+                        }
+                        break;
+
+                    case 'dungeon':
+                        ClickDungeonBehavior();
+                        break;
                 }
-                break;
 
-            case 'dungeon':
-                ClickDungeonBehavior();
-                break;
+                ClickCommandBehavior();
+                ClickInventoryBehavior();
+
+                //delete msg log
+                while (message.length > 5) {
+                    message.splice(0, 1);
+                }
+            }
+            PlayerDeadInit();
+        } else {
+            ClickCommandBehavior();
         }
 
-        ClickCommandBehavior();
-        ClickInventoryBehavior();
-
-        //delete msg log
-        while (message.length > 5) {
-            message.splice(0, 1);
-        }
+    if(data_waiting){
+        DataWait();
     }
-
-
 }
 
 function Prepare() {
@@ -88,8 +102,8 @@ function Prepare() {
         dungeon[i] = [];
 
         for (let j = 0; j < 11; j++) {
-            world[i][j] = { type: 0, name: 'ocean', level: 0 };
-            battleChip[i][j] = { name: 'action' };
+            world[i][j] = { type: 6, name: 'ocean', level: 0 };
+            battleChip[i][j] = { name: 'action', opened: false, count: 0 };
             treasure[i][j] = { name: 'nothing', answer: 'empty' };  //nothing, unopened, name, trap, coin, empty
             dungeon[i][j] = {};
         }
@@ -163,16 +177,18 @@ function Prepare() {
 
     //
     if (myhome_x - 1 >= 0)
-        world[myhome_x - 1][myhome_y] = { type: 1, name: 'undeveloped', level: 1 };
+        world[myhome_x - 1][myhome_y] = { type: 1, name: 'undeveloped', level: 0 };
     if (myhome_x + 1 <= 10)
-        world[myhome_x + 1][myhome_y] = { type: 1, name: 'undeveloped', level: 1 };
+        world[myhome_x + 1][myhome_y] = { type: 1, name: 'undeveloped', level: 0 };
     if (myhome_y - 1 >= 0)
-        world[myhome_x][myhome_y - 1] = { type: 1, name: 'undeveloped', level: 1 };
+        world[myhome_x][myhome_y - 1] = { type: 1, name: 'undeveloped', level: 0 };
     if (myhome_y + 1 <= 10)
-        world[myhome_x][myhome_y + 1] = { type: 1, name: 'undeveloped', level: 1 };
+        world[myhome_x][myhome_y + 1] = { type: 1, name: 'undeveloped', level: 0 };
 
     //player equip state
     PlayerEquipAddition();
+
+    SetEquipmentTable();
 }
 
 function GenerateLand(x, y) {
@@ -226,6 +242,10 @@ function SetAreaData() {
 
 function GenerateArea(x, y) {
 
+    cpMapLv = world[x][y].level = zuitul_level;
+
+    player_nowhp -= world[x][y].level;
+
     //type set
     player_zp -= world[x][y].level;
 
@@ -244,7 +264,7 @@ function GenerateArea(x, y) {
         } else {
             if (!flags.map[world[x][y].level].dungeon) {
                 world[x][y].type = 5;
-            }else{
+            } else {
                 world[x][y].type = 4;
             }
         }
@@ -274,14 +294,14 @@ function GenerateArea(x, y) {
     if (x - 1 >= 0 && world[x][y].level < 7) {
         if (world[x - 1][y].type == 7) {
             world[x - 1][y].type = 1;
-            world[x - 1][y].level = world[x][y].level + 1;
+            world[x - 1][y].level = 0;
             world[x - 1][y].name = 'undeveloped';
         }
     }
     if (x + 1 < worldSize && world[x][y].level < 7) {
         if (world[x + 1][y].type == 7) {
             world[x + 1][y].type = 1;
-            world[x + 1][y].level = world[x][y].level + 1;
+            world[x + 1][y].level = 0;
             world[x + 1][y].name = 'undeveloped';
         }
     }
@@ -289,98 +309,29 @@ function GenerateArea(x, y) {
     if (y - 1 >= 0 && world[x][y].level < 7) {
         if (world[x][y - 1].type == 7) {
             world[x][y - 1].type = 1;
-            world[x][y - 1].level = world[x][y].level + 1;
+            world[x][y - 1].level = 0;
             world[x][y - 1].name = 'undeveloped';
         }
     }
     if (y + 1 < worldSize && world[x][y].level < 7) {
         if (world[x][y + 1].type == 7) {
             world[x][y + 1].type = 1;
-            world[x][y + 1].level = world[x][y].level + 1;
+            world[x][y + 1].level = 0;
             world[x][y + 1].name = 'undeveloped';
         }
     }
 }
 
-function DataAllClear() {
-    //process
-    gamemode = "free";
-    world = [];
-    flg_prepare = false;
-    treasure = [];
-    treasureReward = false;
-
-    //battlesystem
-    battleChip = [];
-    battleTurn = true;
-    battlePlayerAction = "";
-    battleEnemyAction = "";
-    battleReward = false;
-
-    //clickbehavior
-    cpMapX = 0;
-    cpMapY = 0;
-    cpMapID = 0;
-    cpMapName = "";
-    cpPickX = 0;
-    cpPickY = 0;
-    command = [];
-    cmdName = "";
-    cmdOver = -1;
-
-    //drawing
-    standImage = "";
-
-    //dungeon
-    dungeon = [];
-    dungeon_posX = 0;
-    dungeon_posY = 0;
-    dungeon_Searching = false;
-
-    //enemy
-    enemy_name = "";
-    enemy_nowhp = 0;
-    enemy_str = 0;
-    enemy_vit = 0;
-    enemy_spd = 0;
-    enemy_selected = [];
-
-    //flags
-    flags.npc = { sika: false, lion: false, d_soldier: false, mouko: false };
-    flags.map = [
-        { town: false, dungeon: false }, { town: false, dungeon: false }, { town: false, dungeon: false },
-        { town: false, dungeon: false }, { town: false, dungeon: false }, { town: false, dungeon: false },
-        { town: false, dungeon: false }, { town: false, dungeon: false },];
-    //item
-    inventory = [];
-
-    //message
-    message = [];
-
-    //player
-    player_nowhp = 100;
-    player_maxhp = 100;
-    player_str = 10;
-    player_vit = 10;
-    player_spd = 10;
-
-    player_equip_str = 0;
-    player_equip_vit = 0;
-    player_equip_spd = 0;
-
-    player_money = 1000;
-    player_zp = 100;
-
-    player_equip = [
-        { type: "left", name: "", str: 0, vit: 0 },
-        { type: "right", name: "", str: 0, vit: 0 },
-        { type: "outer", name: "outer", str: 0, vit: 5 },
-        { type: "pants", name: "pants", str: 0, vit: 5 },
-        { type: "helmet", name: "", str: 0, vit: 0 },
-        { type: "ring", name: "", str: 0, vit: 0 },
-        { type: "brcelet", name: "", str: 0, vit: 0 },
-        { type: "necklace", name: "necklace", str: 0, vit: 0 },
-        { type: "shoes", name: "shoes", str: 0, vit: 0 },
-        { type: "artifact", name: "", str: 0, vit: 0 }
-    ];
+function PlayerDeadInit() {
+    if (player_nowhp <= 0) {
+        message = [];
+        message.push("体力がなくなり、");
+        message.push("動けなくなってしまった・・・。");
+        command = [];
+        cmdOver = -1;
+        command = [
+            { name: 'restart', label: '－もう一度夢を見なおす', pos_x: 1184, pos_y: 674 }
+        ];
+        gameover = true;
+    }
 }

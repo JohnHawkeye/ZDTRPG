@@ -10,7 +10,9 @@ function GenerateCommand() {
         case 2:
             command = [
                 { name: 'explore', label: '－何かないか探す', pos_x: 1184, pos_y: 674 },
-                { name: 'sleep', label: '－休む', pos_x: 1184, pos_y: 706 }
+                { name: 'sleep', label: '－休む', pos_x: 1184, pos_y: 674 + ls },
+                { name: 'data_save', label: '－セーブする', pos_x: 1184, pos_y: 674 + ls * 2 },
+                { name: 'data_load', label: '－ロードする', pos_x: 1184, pos_y: 674 + ls * 3 },
             ];
             break;
 
@@ -18,6 +20,9 @@ function GenerateCommand() {
             command = [
                 { name: 'talk_npc', label: '－町の人と話す', pos_x: 1184, pos_y: 674 },
                 { name: 'shopping', label: '－お買い物をする', pos_x: 1184, pos_y: 674 + ls },
+                { name: 'pawnshop', label: '－質屋で売る', pos_x: 1184, pos_y: 674 + ls * 2 },
+                { name: 'inn', label: '－宿屋に泊まる', pos_x: 1184, pos_y: 674 + ls * 3 },
+                { name: 'training', label: '－修練所で鍛える', pos_x: 1184, pos_y: 674 + ls * 4 },
             ];
             break;
 
@@ -41,13 +46,32 @@ function CommandEvent(name) {
 
     switch (name) {
         case 'explore':
-            GetItem("left");
-            GetItem("helmet");
-            GetMessage(name);
+            if (!flags.myhome_item) {
+                GetEquipment(1, "left");
+                GetEquipment(1, "outer");
+                GetEquipment(1, "pants");
+                flags.myhome_item = true;
+            } else {
+                message.push("これ以上は何もないようだ。");
+            }
             break;
         case 'sleep':
             GetMessage(name);
             player_nowhp = player_maxhp;
+            break;
+
+        case 'data_save':
+            DataSave();
+            data_waiting = true;
+            message = [];
+            message.push("セーブしています...");
+            break;
+
+        case 'data_load':
+            DataLoad();
+            data_waiting = true;
+            message = [];
+            message.push("ロードしています...");
             break;
 
         case 'talk_npc':
@@ -61,6 +85,21 @@ function CommandEvent(name) {
 
         case 'shopping':
             Shopping();
+            gamemode = "npc";
+            break;
+
+        case 'inn':
+            Inn();
+            gamemode = "npc";
+            break;
+
+        case 'training':
+            Training();
+            gamemode = "npc";
+            break;
+
+        case 'pawnshop':
+            PawnShop();
             gamemode = "npc";
             break;
 
@@ -123,6 +162,11 @@ function CommandEvent(name) {
             gamemode = "battle";
             SetBattleChip();
             break;
+
+        case 'restart':
+            DataAllClear();
+            gameover = false;
+            break;
     }
 }
 
@@ -149,7 +193,7 @@ function CommandBattleEvent(name) {
             //in dungeon
             gamemode = (dungeon_Searching) ? "dungeon" : "free";
             battlePlayerAction = "";
-            battleEnemyAction ="";
+            battleEnemyAction = "";
 
             battleReward = false;
             GenerateCommand();
@@ -169,16 +213,15 @@ function CommandBattleEvent(name) {
 
 function Explore() {
 
-    if (player_nowhp > world[cpMapX][cpMapY].level * 10) {
+    if (player_nowhp > world[cpMapX][cpMapY].level) {
 
-        player_nowhp -= world[cpMapX][cpMapY].level * 10;
+        player_nowhp -= world[cpMapX][cpMapY].level;
 
         let rn = Math.floor(Math.random() * 10);
-        rn = 6;
 
-        if (rn >= 6) {
+        if (rn >= 4) {
             rn = Math.floor(Math.random() * 10);
-            if (rn >= 2) {
+            if (rn >= 4) {
                 message.push("特に何も見つからなかった。");
             } else {
 

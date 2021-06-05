@@ -1,5 +1,6 @@
 
 var standImage = "";
+var labelDisplay = "";
 
 function Render() {
 
@@ -44,6 +45,10 @@ function Render() {
     DrawingInventory();
     DrawingStand();
     DrawingEnemyHealth();
+
+    if (data_waiting) {
+        DrawingDataWaiting();
+    }
 }
 
 function DrawingWorldIcon() {
@@ -77,10 +82,13 @@ function DrawingBattlechip() {
         for (let j = 0; j < battleChip[i].length; j++) {
 
             if (typeof Asset.icon_map[battleChip[i][j].name] !== 'undefined') {
-                ctx.drawImage(Asset.images['icon_map'],
-                    Asset.icon_map[battleChip[i][j].name].sx, Asset.icon_map[battleChip[i][j].name].sy, 64, 64,
-                    64 * i + offset_x, 64 * j + offset_y,
-                    64, 64);
+                if (battleChip[i][j].count <= battleChipSetCountMax - battleChipSetCount &&
+                    battleChip[i][j].count != 0) {
+                    ctx.drawImage(Asset.images['icon_map'],
+                        Asset.icon_map[battleChip[i][j].name].sx, Asset.icon_map[battleChip[i][j].name].sy, 64, 64,
+                        64 * i + offset_x, 64 * j + offset_y,
+                        64, 64);
+                }
             }
 
         }
@@ -138,6 +146,7 @@ function DrawingScenery() {
     switch (cpMapID) {
         case 2:
             imageName = "scenery_myhome";
+            labelDisplay = "マイホーム";
             break;
         case 3: imageName = SelectTownImage(cpMapName);
             break;
@@ -147,8 +156,22 @@ function DrawingScenery() {
             break;
     }
 
+    if (gamemode === "battle") {
+        labelDisplay = enemy_label;
+    }
+
     if (typeof Asset.images[imageName] !== 'undefined')
         ctx.drawImage(Asset.images[imageName], offset_x, offset_y);
+
+    //label display
+    ctx.font = 24 + "px PixelMplus12";
+    ctx.textBaseline = "top";
+    ctx.textAlign = "right";
+    ctx.fillStyle = "black";
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 4;
+    ctx.strokeText(labelDisplay, offset_x + 384, offset_y + 416 - 32);
+    ctx.fillText(labelDisplay, offset_x + 384, offset_y + 416 - 32);
 }
 
 function DrawingMessage() {
@@ -187,7 +210,7 @@ function DrawingCommand() {
 function DrawingPlayerState() {
 
     let offset_x = 64;
-    let offset_y = 66;
+    let offset_y = 64;
     let space = 24;
 
     ctx.font = 24 + "px PixelMplus12";
@@ -195,13 +218,21 @@ function DrawingPlayerState() {
     ctx.textAlign = "left";
     ctx.fillStyle = "white";
 
+    //name
+    ctx.fillText(player_name, offset_x + 8, offset_y + 8);
+    //status
+    ctx.fillText("[LV ]:" + player_level + "(EXP:" + player_exp + "/7)", offset_x + 8, offset_y + 8 + space * 1);
 
-    //hp
-    ctx.fillText("HP:" + player_nowhp + " / " + player_maxhp, offset_x + 8, offset_y + 8);
-    ctx.fillText("STR:" + player_str + "(+" + player_equip_str + ")", offset_x + 8, offset_y + 8 + space * 1);
-    ctx.fillText("VIT:" + player_vit + "(+" + player_equip_vit + ")", offset_x + 8, offset_y + 8 + space * 2);
-    //ctx.fillText("SPD:" + player_spd + "(+" + + ")", offset_x + 8, offset_y + 8 + space * 1);
-    ctx.fillText("ZP:" + player_zp, offset_x + 8, offset_y + 8 + space * 3);
+    let par = player_nowhp / player_maxhp;
+    if (par <= 0.3) {
+        ctx.fillStyle = "red";
+    }
+    ctx.fillText("[HP ]:" + player_nowhp + " / " + player_maxhp, offset_x + 8, offset_y + 8 + space * 2);
+    ctx.fillStyle = "white";
+    ctx.fillText("[STR]:" + player_str + "(+" + player_equip_str + ")", offset_x + 8, offset_y + 8 + space * 3);
+    ctx.fillText("[VIT]:" + player_vit + "(+" + player_equip_vit + ")", offset_x + 8, offset_y + 8 + space * 4);
+    ctx.fillText("[SPD]:" + player_spd + "(+" + player_equip_spd + ")", offset_x + 8, offset_y + 8 + space * 5);
+    ctx.fillText("[ZL ]:" + zuitul_level + "  [ZP ]:" + player_zp + "", offset_x + 8, offset_y + 8 + space * 7);
 
     //money
     offset_x = 400;
@@ -219,11 +250,15 @@ function DrawingEquip() {
     let offset_x = 64;
     let offset_y = 450;
     let line = 0; row = 0;
+    let cg_x = 0, cg_y = 0;
 
     for (let i = 0; i < player_equip.length; i++) {
         if (typeof player_equip[i] !== 'undefined' && player_equip[i].name !== "") {
+            cg_x = player_equip[i].lv * 64 - 64;
+
             ctx.drawImage(Asset.images['icon_item'],
-                Asset.icon_item[player_equip[i].name].sx, Asset.icon_item[player_equip[i].name].sy,
+                Asset.icon_item[player_equip[i].name].sx + cg_x,
+                Asset.icon_item[player_equip[i].name].sy,
                 64, 64,
                 offset_x + 64 * line, offset_y + row,
                 64, 64);
@@ -241,10 +276,14 @@ function DrawingInventory() {
 
     let offset_x = 64;
     let offset_y = 610;
+    let cg_x = 0, cg_y = 0;
 
     for (let i = 0; i < inventory.length; i++) {
+        if (inventory[i].category !== "consumable") {
+            cg_x = inventory[i].lv * 64 - 64;
+        }
         ctx.drawImage(Asset.images['icon_item'],
-            Asset.icon_item[inventory[i].name].sx, Asset.icon_item[inventory[i].name].sy,
+            Asset.icon_item[inventory[i].name].sx + cg_x, Asset.icon_item[inventory[i].name].sy,
             64, 64,
             offset_x + inventory[i].pos_x, offset_y + inventory[i].pos_y,
             64, 64);
@@ -269,7 +308,7 @@ function DrawingStand() {
         size_h = Asset.images[standImage].height;
 
         //battle mode
-        if (gamemode === "battle" || gamemode === "treasure") {
+        if (gamemode !== "npc") {
             sx = 1184 + 384 / 2, sy = 34 + 416 / 2;
 
             if (size_w > 384 || size_h > 384) {
@@ -315,12 +354,12 @@ function DrawingEnemyHealth() {
         if (typeof Asset.icon_map[battlePlayerAction] !== 'undefined') {
             ctx.drawImage(Asset.images['icon_map'],
                 Asset.icon_map[battlePlayerAction].sx, Asset.icon_map[battlePlayerAction].sy, 64, 64,
-                448+64, 824, 64, 64);
+                448 + 64, 824, 64, 64);
         }
         if (typeof Asset.icon_map[battleEnemyAction] !== 'undefined') {
             ctx.drawImage(Asset.images['icon_map'],
                 Asset.icon_map[battleEnemyAction].sx, Asset.icon_map[battleEnemyAction].sy, 64, 64,
-                448+64, 16, 64, 64);
+                448 + 64, 16, 64, 64);
         }
     }
 
@@ -331,4 +370,18 @@ function DrawingEnemyHealth() {
         ctx.fillStyle = "rgb(96,49,0)";
         ctx.fillText("勝利！！ ", CENTER_X, 32);
     }
+}
+
+function DrawingDataWaiting() {
+
+    let offset_x = 1184;
+    let offset_y = 482;
+
+    let rate = data_waittime / 2;
+    rate = Math.floor(rate * 128);
+
+    ctx.strokeStyle = "white";
+    ctx.fillStyle = "white";
+    ctx.fillRect(offset_x +248, offset_y+8, rate, 24);
+    ctx.strokeRect(offset_x +248, offset_y+6, 128, 24);
 }

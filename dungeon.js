@@ -25,7 +25,7 @@ function SetDungeonData() {
             switch (piyodou[j][i]) {
                 case 0:
                     dungeon[i][j] = { name: "block", answer: "block" };
-                    break
+                    break;
                 case 1:
                     dungeon[i][j] = { name: "undeveloped", answer: "nothing" };
                     break;
@@ -47,7 +47,6 @@ function SetDungeonData() {
 
                 if (num > 6) {
                     dungeon[i][j].answer = "minion";
-                    console.log("selected mob");
                 } else {
                     switch (rn) {
                         case 4:
@@ -80,7 +79,7 @@ function DungeonMovingEvent() {
     if (dungeon[dungeon_posX][dungeon_posY].name === "undeveloped")
         dungeon[dungeon_posX][dungeon_posY].name = dungeon[dungeon_posX][dungeon_posY].answer;
 
-    standImage ="";
+    standImage = "";
     switch (dungeon[dungeon_posX][dungeon_posY].name) {
         case "start":
             GenerateDungeonCommand();
@@ -91,12 +90,19 @@ function DungeonMovingEvent() {
             break;
 
         case "pit":
-            message.push("罠にかかってしまった！");
-            if (player_nowhp - 10 < 0) {
-                player_nowhp = 0;
+            let rn = Math.floor(Math.random() * 10);
+            if (rn >= 2) {
+                message.push("罠にかかってしまった！");
+                if (player_nowhp - 10 < 0) {
+                    player_nowhp = 0;
+                } else {
+                    player_nowhp -= 10;
+                }
             } else {
-                player_nowhp -= 10;
+                message.push("罠だ！");
+                message.push("しかし運よくかからなかった。");
             }
+
             GenerateDungeonCommand();
             break;
 
@@ -108,10 +114,10 @@ function DungeonMovingEvent() {
             break;
 
         case "minion":
-            message.push("モンスターが現れた！");
+            message.push("モンスターだ。");
+            message.push("しかしまだこちらに気付いていない。");
             SetEnemyData();
             SetBattleCommand();
-            gamemode = "npc";
             break;
 
         case "boss":

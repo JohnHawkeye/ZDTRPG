@@ -112,12 +112,32 @@ Asset.assets = [
 	{ type: 'image', name: 'scenery_tumeato', src: 'Assets/Images/scenery_tumeato.png' },
 
 	//stand
-	{ type: 'image', name: 'stand_hako', src: 'Assets/Images/stand_hako.png' },
-	{ type: 'image', name: 'stand_sika', src: 'Assets/Images/stand_sika.png' },
-	{ type: 'image', name: 'stand_lion', src: 'Assets/Images/stand_lion.png' },
+	{ type: 'image', name: 'stand_arakuma', src: 'Assets/Images/stand_arakuma.png' },
+	{ type: 'image', name: 'stand_aronasu', src: 'Assets/Images/stand_aronasu.png' },
+	{ type: 'image', name: 'stand_azarisu', src: 'Assets/Images/stand_azarisu.png' },
+	{ type: 'image', name: 'stand_budouka', src: 'Assets/Images/stand_budouka.png' },
+	{ type: 'image', name: 'stand_buta', src: 'Assets/Images/stand_buta.png' },
 	{ type: 'image', name: 'stand_d_soldier', src: 'Assets/Images/stand_d_soldier.png' },
-	{ type: 'image', name: 'stand_mouko', src: 'Assets/Images/stand_mouko.png' },
+	{ type: 'image', name: 'stand_dias', src: 'Assets/Images/stand_dias.png' },
+	{ type: 'image', name: 'stand_dorago', src: 'Assets/Images/stand_dorago.png' },
+	{ type: 'image', name: 'stand_doraoya', src: 'Assets/Images/stand_doraoya.png' },
+	{ type: 'image', name: 'stand_hako', src: 'Assets/Images/stand_hako.png' },
+	{ type: 'image', name: 'stand_hebitan', src: 'Assets/Images/stand_hebitan.png' },
+	{ type: 'image', name: 'stand_inosisi', src: 'Assets/Images/stand_inosisi.png' },
+	{ type: 'image', name: 'stand_kamebaa', src: 'Assets/Images/stand_kamebaa.png' },
 	{ type: 'image', name: 'stand_kitune', src: 'Assets/Images/stand_kitune.png' },
+	{ type: 'image', name: 'stand_kumapati', src: 'Assets/Images/stand_kumapati.png' },
+	{ type: 'image', name: 'stand_lion', src: 'Assets/Images/stand_lion.png' },
+	{ type: 'image', name: 'stand_mouko', src: 'Assets/Images/stand_mouko.png' },
+	{ type: 'image', name: 'stand_negi', src: 'Assets/Images/stand_negi.png' },
+	{ type: 'image', name: 'stand_saru', src: 'Assets/Images/stand_saru.png' },
+	{ type: 'image', name: 'stand_sika', src: 'Assets/Images/stand_sika.png' },
+	{ type: 'image', name: 'stand_sitiya', src: 'Assets/Images/stand_sitiya.png' },
+	{ type: 'image', name: 'stand_tokagen', src: 'Assets/Images/stand_tokagen.png' },
+	{ type: 'image', name: 'stand_tubamen', src: 'Assets/Images/stand_tubamen.png' },
+	{ type: 'image', name: 'stand_umajou', src: 'Assets/Images/stand_umajou.png' },
+	{ type: 'image', name: 'stand_usako', src: 'Assets/Images/stand_usako.png' },
+	{ type: 'image', name: 'stand_yomikirin', src: 'Assets/Images/stand_yomikirin.png' },
 ];
 
 //icon image position
@@ -132,11 +152,21 @@ Asset.icon_item = {
 	necklace: { sx: 0, sy: 448 },
 	shoes: { sx: 0, sy: 512 },
 	artifact: { sx: 0, sy: 576 },
+
 	food: { sx: 0, sy: 640 },
+	food2: { sx: 64, sy: 640 },
+	food3: { sx: 128, sy: 640 },
+	food4: { sx: 192, sy: 640 },
+	food5: { sx: 256, sy: 640 },
+	food6: { sx: 320, sy: 640 },
+	food7: { sx: 384, sy: 640 },
+
 	drink: { sx: 0, sy: 704 },
+
 	tool: { sx: 0, sy: 768 },
 	key: { sx: 0, sy: 832 },
-	treasure: { sx: 0, sy: 896 },
+	coin: { sx: 0, sy: 896 },
+
 };
 
 Asset.icon_map = {
@@ -190,7 +220,7 @@ Asset.icon_map = {
 	pit: { sx: 320, sy: 384 },
 	start: { sx: 384, sy: 384 },
 	treasure: { sx: 64, sy: 0 },
-	
+
 	enemy_attack: { sx: 64, sy: 448 },
 	enemy_defend: { sx: 128, sy: 448 },
 	enemy_critical: { sx: 192, sy: 448 },
@@ -205,19 +235,16 @@ Asset.loadAssets = function (onComplete) {
 	var loadCount = 0;
 
 	var onLoad = function () {
+		ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-		ctx.font = 6 * SCREEN_MAGNIFICATION + "px PixelMplus12";
-		ctx.fillStyle = "rgb(204,204,204)";
+		ctx.font = 32 + "px PixelMplus12";
+		ctx.fillStyle = "rgb(96,49,0)";
 		ctx.textBeaseline = "middle";
 		ctx.textAlign = "center";
 
-		ctx.fillText("ろーどちゅん",
-			80 * SCREEN_MAGNIFICATION,
-			72 * SCREEN_MAGNIFICATION);
+		ctx.fillText("ろーどちゅん", CENTER_X, CENTER_Y);
 
-		ctx.fillText("(" + loadCount + "/" + total + ")",
-			80 * SCREEN_MAGNIFICATION,
-			82 * SCREEN_MAGNIFICATION);
+		ctx.fillText("(" + loadCount + "/" + total + ")", CENTER_X, CENTER_Y+64);
 
 		loadCount++;
 		if (loadCount >= total) {

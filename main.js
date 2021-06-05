@@ -66,6 +66,10 @@ function init() {
     canvas.addEventListener('mousemove', onMouseMove, false);
     canvas.addEventListener('wheel', mouseWheel);
 
+    //touch event listener
+    canvas.addEventListener('touchstart',handleStart,false);
+    canvas.addEventListener('touchend',handleEnd,false);
+
     //key event listener
     document.addEventListener('keydown', KeyDoun);
     document.addEventListener('keyup', KeyUp);

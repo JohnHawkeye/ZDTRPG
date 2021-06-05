@@ -12,43 +12,7 @@ function GetMessage(name) {
 
         case 'talk_npc':
             SetNpcFriend();
-            SetMessageBranch();
             break;
-             
-    }
-}
-
-function SetMessageBranch() {
-
-    let space = 32;
-
-    command = [];
-    command = [
-        { name: 'friend_want', label: '－ともだちになる', pos_x: 1184, pos_y: 674 },
-        { name: 'seeyou', label: '－さよならする', pos_x: 1184, pos_y: 674 + space * 1 }
-    ];
-}
-
-function GetTreasureMessage(name){
-    switch (name) {
-        case 'hit':
-            GetItem("drink");
-            break;
-
-        case 'empty':
-            message.push("宝箱の中は空っぽだった。");
-            
-            break;
-
-        case 'trap':
-            message.push("トラップだ！ダメージを受けてしまった！");
-            if(player_nowhp - 10 < 0){
-                player_nowhp = 0;
-            }else{
-                player_nowhp -= 10;
-            }
-            break;
-
     }
 }
 
